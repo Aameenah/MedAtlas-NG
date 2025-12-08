@@ -162,20 +162,20 @@ const App: React.FC = () => {
         return (
           <>
             <Hero onSearch={handleSearch} />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-slate-900">Featured Facilities in Ilorin</h2>
-                <p className="text-slate-500 mt-2">Top-rated hospitals and clinics available for instant booking</p>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+              <div className="text-center mb-8 sm:mb-12">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Featured Facilities in Ilorin</h2>
+                <p className="text-sm sm:text-base text-slate-500 mt-2">Top-rated hospitals and clinics available for instant booking</p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {MOCK_FACILITIES.slice(0, 3).map(facility => (
                   <FacilityCard key={facility.id} facility={facility} onSelect={handleFacilitySelect} />
                 ))}
               </div>
-              <div className="mt-16 bg-purple-900 rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+              <div className="mt-12 sm:mt-16 bg-purple-900 rounded-3xl p-6 sm:p-12 text-center text-white relative overflow-hidden">
                 <div className="relative z-10">
-                    <h2 className="text-3xl font-bold mb-4">Are you a Healthcare Provider?</h2>
-                    <p className="text-purple-200 mb-8 max-w-2xl mx-auto">
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-4">Are you a Healthcare Provider?</h2>
+                    <p className="text-purple-200 mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">
                         Join MedAtlas.ng to increase your visibility, manage your schedule efficiently, and reduce no-shows.
                     </p>
                     <button 
@@ -183,7 +183,7 @@ const App: React.FC = () => {
                           setUserRole('PROVIDER');
                           setView(ViewState.DASHBOARD);
                         }}
-                        className="bg-white text-purple-900 px-8 py-3 rounded-xl font-bold hover:bg-purple-50 transition-colors inline-flex items-center gap-2"
+                        className="bg-white text-purple-900 px-6 sm:px-8 py-3 rounded-xl font-bold hover:bg-purple-50 transition-colors inline-flex items-center gap-2"
                     >
                         <HeartHandshake className="w-5 h-5" />
                         Partner With Us
@@ -198,17 +198,17 @@ const App: React.FC = () => {
 
       case ViewState.SEARCH:
         return (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
-             <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 border-b border-purple-100 pb-4">
-               <div>
-                  <h2 className="text-2xl font-bold text-slate-900">Search Results</h2>
-                  <p className="text-slate-500 text-sm mt-1">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 min-h-screen">
+             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 border-b border-purple-100 pb-4">
+               <div className="mb-4 sm:mb-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Search Results</h2>
+                  <p className="text-slate-500 text-xs sm:text-sm mt-1">
                     Found {filteredFacilities.length} facilities for <span className="font-semibold text-purple-700">{filters.specialty || 'All Specialties'}</span> in <span className="font-semibold text-purple-700">{filters.location || 'Ilorin'}</span>
                   </p>
                </div>
                <button 
                 onClick={() => setView(ViewState.HOME)}
-                className="mt-4 sm:mt-0 text-purple-600 text-sm font-semibold flex items-center hover:text-purple-800"
+                className="text-purple-600 text-sm font-semibold flex items-center hover:text-purple-800 bg-purple-50 px-3 py-1.5 rounded-lg sm:bg-transparent sm:p-0"
                >
                  <Filter className="w-4 h-4 mr-1" /> Adjust Filters
                </button>
@@ -221,7 +221,7 @@ const App: React.FC = () => {
                   ))}
                 </div>
              ) : (
-                <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
+                <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300 mx-4 sm:mx-0">
                     <div className="text-slate-400 mb-4">No facilities found matching your criteria.</div>
                     <button onClick={() => setView(ViewState.HOME)} className="text-purple-600 font-bold hover:underline">
                         Try different filters
@@ -273,7 +273,7 @@ const App: React.FC = () => {
       </main>
 
       {view !== ViewState.ONBOARDING && view !== ViewState.AUTH && (
-        <footer className="bg-white border-t border-purple-100 py-12">
+        <footer className="bg-white border-t border-purple-100 py-8 sm:py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
                 <div className="text-center text-slate-400 text-sm">
                 &copy; 2025 MedAtlas Nigeria.

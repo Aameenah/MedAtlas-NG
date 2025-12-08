@@ -18,7 +18,7 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
   const facilityReviews = reviews.filter(r => r.facilityId === facility.id);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-fade-in-up">
       <button onClick={onBack} className="flex items-center text-slate-500 hover:text-purple-600 mb-6 transition-colors font-medium">
         <ArrowLeft className="w-4 h-4 mr-2" /> Back to Search Results
       </button>
@@ -28,40 +28,41 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
         <div className="lg:col-span-2 space-y-8">
           {/* Header Card */}
           <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-purple-100">
-             <div className="h-64 relative">
+             <div className="h-56 sm:h-80 relative">
                 <img src={facility.image} alt={facility.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                    <h1 className="text-3xl font-bold mb-2">{facility.name}</h1>
-                    <div className="flex items-center gap-4 text-sm font-medium opacity-90">
-                        <span className="flex items-center"><MapPin className="w-4 h-4 mr-1" /> {facility.address}</span>
-                        <span className="flex items-center"><Clock className="w-4 h-4 mr-1" /> {facility.openingHours}</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 text-white">
+                    <h1 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight">{facility.name}</h1>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium opacity-90">
+                        <span className="flex items-center"><MapPin className="w-3.5 h-3.5 mr-1" /> {facility.address}</span>
+                        <span className="hidden sm:inline text-slate-400">•</span>
+                        <span className="flex items-center"><Clock className="w-3.5 h-3.5 mr-1" /> {facility.openingHours}</span>
                     </div>
                 </div>
              </div>
-             <div className="p-6">
-                 <div className="flex items-center gap-2 mb-4">
-                     <div className="flex bg-yellow-50 px-3 py-1 rounded-full">
-                         <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 mr-1" />
-                         <span className="font-bold text-slate-800">{facility.rating}</span>
+             <div className="p-5 sm:p-6">
+                 <div className="flex flex-wrap items-center gap-3 mb-4">
+                     <div className="flex bg-yellow-50 px-3 py-1 rounded-full items-center">
+                         <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500 mr-1" />
+                         <span className="font-bold text-slate-800 text-sm">{facility.rating}</span>
                          <span className="text-slate-500 text-xs ml-1">({facility.reviews} reviews)</span>
                      </div>
                      <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center">
-                        <ShieldCheck className="w-3 h-3 mr-1" /> Verified Facility
+                        <ShieldCheck className="w-3.5 h-3.5 mr-1" /> Verified Facility
                      </span>
                  </div>
-                 <p className="text-slate-600 leading-relaxed">{facility.description}</p>
+                 <p className="text-slate-600 leading-relaxed text-sm sm:text-base">{facility.description}</p>
              </div>
           </div>
 
           {/* Available Doctors */}
           <div>
-            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 flex items-center">
                 <Stethoscope className="w-5 h-5 mr-2 text-purple-600" /> Available Specialists
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {doctors.map(doctor => (
-                    <div key={doctor.id} className="bg-white p-4 rounded-xl border border-slate-100 flex items-center gap-4 hover:border-purple-200 transition-colors">
+                    <div key={doctor.id} className="bg-white p-4 rounded-xl border border-slate-100 flex items-center gap-4 hover:border-purple-200 transition-colors shadow-sm">
                         <img src={doctor.image} alt={doctor.name} className="w-16 h-16 rounded-full object-cover border-2 border-slate-100" />
                         <div>
                             <h3 className="font-bold text-slate-900">{doctor.name}</h3>
@@ -74,9 +75,9 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
           </div>
 
           {/* Reviews Section */}
-          <div>
+          <div className="pb-8 lg:pb-0">
              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center">
                     <MessageSquare className="w-5 h-5 mr-2 text-purple-600" /> Patient Reviews
                 </h2>
                 <span className="text-sm text-slate-500">{facilityReviews.length} verified reviews</span>
@@ -117,7 +118,8 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
 
         {/* Right Column: Services & Booking */}
         <div className="lg:col-span-1">
-            <div className="bg-white rounded-3xl shadow-xl border border-purple-100 overflow-hidden sticky top-24">
+            {/* On mobile, this will appear below content. We use lg:sticky to only stick on desktop */}
+            <div className="bg-white rounded-3xl shadow-xl border border-purple-100 overflow-hidden lg:sticky lg:top-24">
                 <div className="bg-slate-50 p-6 border-b border-purple-100">
                     <h3 className="font-bold text-lg text-slate-900">Select a Service</h3>
                     <p className="text-sm text-slate-500">Choose a service to view availability and book.</p>
@@ -131,10 +133,10 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
                             className={`p-4 cursor-pointer transition-colors hover:bg-purple-50 ${selectedService?.id === service.id ? 'bg-purple-50 border-l-4 border-purple-600' : ''}`}
                         >
                             <div className="flex justify-between items-center mb-1">
-                                <span className={`font-medium ${selectedService?.id === service.id ? 'text-purple-900' : 'text-slate-700'}`}>
+                                <span className={`font-medium text-sm sm:text-base ${selectedService?.id === service.id ? 'text-purple-900' : 'text-slate-700'}`}>
                                     {service.name}
                                 </span>
-                                <span className="font-bold text-slate-900">₦{service.price.toLocaleString()}</span>
+                                <span className="font-bold text-slate-900 text-sm sm:text-base">₦{service.price.toLocaleString()}</span>
                             </div>
                             {selectedService?.id === service.id && (
                                 <div className="mt-3 animate-fade-in-up">
@@ -147,13 +149,14 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
                                                     e.stopPropagation();
                                                     onBook(service, doc);
                                                 }}
-                                                className="w-full text-left flex items-center gap-2 p-2 rounded-lg hover:bg-white hover:shadow-sm border border-transparent hover:border-purple-100 transition-all group"
+                                                className="w-full text-left flex items-center gap-3 p-2 rounded-lg hover:bg-white hover:shadow-sm border border-transparent hover:border-purple-100 transition-all group"
                                             >
-                                                <img src={doc.image} className="w-8 h-8 rounded-full" alt="" />
+                                                <img src={doc.image} className="w-10 h-10 rounded-full object-cover" alt="" />
                                                 <div className="flex-1">
                                                     <p className="text-sm font-bold text-slate-800">{doc.name}</p>
+                                                    <p className="text-xs text-purple-600">{doc.specialty}</p>
                                                 </div>
-                                                <div className="text-xs font-bold text-purple-600 bg-white px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="text-xs font-bold text-purple-600 bg-white px-3 py-1 rounded-full shadow-sm">
                                                     Book
                                                 </div>
                                             </button>
