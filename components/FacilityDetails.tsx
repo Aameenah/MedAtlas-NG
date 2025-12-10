@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Facility, Doctor, Service, Review } from '../types';
-import { MapPin, Star, ArrowLeft, Clock, ShieldCheck, Stethoscope, MessageSquare } from 'lucide-react';
+import { MapPin, Star, ArrowLeft, Clock, ShieldCheck, Stethoscope, MessageSquare, Navigation } from 'lucide-react';
 
 interface FacilityDetailsProps {
   facility: Facility;
@@ -16,6 +16,11 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
 
   // Filter reviews for this facility
   const facilityReviews = reviews.filter(r => r.facilityId === facility.id);
+
+  // Construct map query
+  const mapQuery = encodeURIComponent(`${facility.name}, ${facility.address}, Ilorin`);
+  const mapUrl = `https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-fade-in-up">
@@ -53,6 +58,39 @@ export const FacilityDetails: React.FC<FacilityDetailsProps> = ({ facility, doct
                  </div>
                  <p className="text-slate-600 leading-relaxed text-sm sm:text-base">{facility.description}</p>
              </div>
+          </div>
+
+          {/* Location & Directions */}
+          <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-purple-100 p-6">
+             <div className="flex justify-between items-center mb-4">
+               <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center">
+                  <MapPin className="w-5 h-5 mr-2 text-purple-600" /> Location
+               </h2>
+               <a 
+                 href={directionsUrl}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-purple-100 transition-colors"
+               >
+                 <Navigation className="w-4 h-4" /> Get Directions
+               </a>
+             </div>
+             <div className="w-full h-64 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+               <iframe 
+                 width="100%" 
+                 height="100%" 
+                 frameBorder="0" 
+                 scrolling="no" 
+                 marginHeight={0} 
+                 marginWidth={0} 
+                 src={mapUrl}
+                 title="Facility Location"
+                 className="w-full h-full"
+               ></iframe>
+             </div>
+             <p className="text-xs text-slate-500 mt-3 flex items-center">
+               <MapPin className="w-3 h-3 mr-1" /> {facility.address}, Ilorin, Kwara State
+             </p>
           </div>
 
           {/* Available Doctors */}
