@@ -1,21 +1,29 @@
 
 import React from 'react';
-import { Appointment } from '../types';
+import { Appointment, AuthUser } from '../types';
 import { Calendar, Clock, MapPin, CheckCircle2, X } from 'lucide-react';
 
 interface PatientAppointmentsProps {
   isOpen: boolean;
   onClose: () => void;
   appointments: Appointment[];
+  currentUser: AuthUser | null;
   onReview: (appointment: Appointment) => void;
 }
 
-export const PatientAppointments: React.FC<PatientAppointmentsProps> = ({ isOpen, onClose, appointments, onReview }) => {
+export const PatientAppointments: React.FC<PatientAppointmentsProps> = ({ isOpen, onClose, appointments, currentUser, onReview }) => {
   if (!isOpen) return null;
 
-  // Filter for patient view (mocking a logged in user "Guest User")
-  // In a real app, this would filter by Auth ID.
-  const myAppointments = appointments.filter(a => a.patientName === 'Guest User' || a.id === 'A4'); // Including A4 for demo purposes
+  // Filter for patient view based on currently logged in user
+  const myAppointments = appointments.filter(a => 
+      // If no user is logged in (shouldn't happen here), show none
+      // If user is logged in, show their appointments matching name (mock DB strategy)
+      currentUser && (a.patientName === currentUser.name || a.patientName === 'Guest User' && currentUser.name === 'Guest User')
+      // Including demo appointments if the user's name matches or if we want to show demo data for a specific "Guest" flow (optional)
+  ); 
+
+  // For the sake of the demo, if I just created a user "John", I won't see "Guest User" appointments. 
+  // This is correct behavior for "Actual Users".
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -23,7 +31,10 @@ export const PatientAppointments: React.FC<PatientAppointmentsProps> = ({ isOpen
       
       <div className="relative w-full max-w-md bg-white h-full shadow-2xl animate-fade-in-up flex flex-col">
         <div className="p-6 border-b border-purple-100 flex justify-between items-center bg-purple-50">
-            <h2 className="text-xl font-bold text-slate-900">My Appointments</h2>
+            <div>
+                <h2 className="text-xl font-bold text-slate-900">My Appointments</h2>
+                {currentUser && <p className="text-xs text-purple-600">Logged in as {currentUser.name}</p>}
+            </div>
             <button onClick={onClose} className="p-2 bg-white rounded-full text-slate-400 hover:text-purple-600 shadow-sm transition-colors">
                 <X size={20} />
             </button>
@@ -34,6 +45,7 @@ export const PatientAppointments: React.FC<PatientAppointmentsProps> = ({ isOpen
                 <div className="text-center py-20 text-slate-400">
                     <Calendar className="w-12 h-12 mx-auto mb-3 opacity-50" />
                     <p>No appointments found.</p>
+                    <p className="text-xs mt-2">Book a specialist to see your history here.</p>
                 </div>
             ) : (
                 myAppointments.map(apt => (

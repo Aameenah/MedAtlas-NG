@@ -1,19 +1,20 @@
 
 import React, { useState } from 'react';
-import { Doctor, Facility, Service, Appointment } from '../types';
+import { Doctor, Facility, Service, Appointment, AuthUser } from '../types';
 import { Calendar, Clock, ShieldCheck, ArrowLeft, CreditCard, Lock, Loader2, Info } from 'lucide-react';
 
 interface BookingFlowProps {
   doctor: Doctor;
   facility: Facility;
   service: Service;
+  currentUser: AuthUser | null;
   onBack: () => void;
   onComplete: (appointment: Appointment) => void;
 }
 
 const BOOKING_FEE = 500;
 
-export const BookingFlow: React.FC<BookingFlowProps> = ({ doctor, facility, service, onBack, onComplete }) => {
+export const BookingFlow: React.FC<BookingFlowProps> = ({ doctor, facility, service, currentUser, onBack, onComplete }) => {
   const [step, setStep] = useState<'datetime' | 'payment' | 'success'>('datetime');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export const BookingFlow: React.FC<BookingFlowProps> = ({ doctor, facility, serv
       setIsProcessing(false);
       const newAppointment: Appointment = {
         id: Math.random().toString(36).substr(2, 9),
-        patientName: "Guest User", // In real app, from Auth context
+        patientName: currentUser ? currentUser.name : "Guest User",
         doctorName: doctor.name,
         hospitalName: facility.name,
         serviceName: service.name,
@@ -191,6 +192,10 @@ export const BookingFlow: React.FC<BookingFlowProps> = ({ doctor, facility, serv
                 <div className="bg-slate-50 p-4 sm:p-6 rounded-2xl mb-6 sm:mb-8 border border-slate-100">
                     <h3 className="font-bold text-slate-900 mb-4 text-sm sm:text-base">Booking Summary</h3>
                     <div className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                            <span className="text-slate-500">Patient</span>
+                            <span className="font-medium text-right ml-2">{currentUser?.name || "Guest"}</span>
+                        </div>
                         <div className="flex justify-between">
                             <span className="text-slate-500">Facility</span>
                             <span className="font-medium text-right ml-2">{facility.name}</span>

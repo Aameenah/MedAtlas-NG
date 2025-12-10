@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ViewState, Facility, Doctor, SearchFilters, UserRole, Appointment, Service, Review } from './types';
+import { ViewState, Facility, Doctor, SearchFilters, UserRole, Appointment, Service, Review, AuthUser } from './types';
 import { MOCK_FACILITIES, MOCK_DOCTORS, MOCK_APPOINTMENTS, MOCK_REVIEWS } from './constants';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -19,6 +19,9 @@ const App: React.FC = () => {
   const [filters, setFilters] = useState<SearchFilters>({ specialty: '', location: '' });
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
+  
+  // Auth State
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   
   // State for Flow
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
@@ -65,8 +68,9 @@ const App: React.FC = () => {
     setView(ViewState.AUTH);
   };
 
-  const handleAuthComplete = () => {
-    if (userRole === 'PATIENT') {
+  const handleAuthComplete = (user: AuthUser) => {
+    setCurrentUser(user);
+    if (user.role === 'PATIENT') {
       setView(ViewState.HOME);
     } else {
       setView(ViewState.DASHBOARD);
@@ -166,6 +170,7 @@ const App: React.FC = () => {
               <div className="text-center mb-8 sm:mb-12">
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Featured Facilities in Ilorin</h2>
                 <p className="text-sm sm:text-base text-slate-500 mt-2">Top-rated hospitals and clinics available for instant booking</p>
+                {currentUser && <p className="mt-2 text-purple-600 font-medium">Welcome, {currentUser.name}</p>}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {MOCK_FACILITIES.slice(0, 3).map(facility => (
@@ -248,6 +253,7 @@ const App: React.FC = () => {
             doctor={selectedDoctor} 
             facility={selectedFacility}
             service={selectedService}
+            currentUser={currentUser}
             onBack={() => setView(ViewState.FACILITY_DETAILS)} 
             onComplete={handleBookingComplete}
           />
@@ -287,6 +293,7 @@ const App: React.FC = () => {
         isOpen={showAppointmentsModal} 
         onClose={() => setShowAppointmentsModal(false)}
         appointments={appointments}
+        currentUser={currentUser}
         onReview={handleOpenReview}
       />
 

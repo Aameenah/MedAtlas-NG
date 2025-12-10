@@ -11,6 +11,13 @@ export enum ViewState {
 
 export type UserRole = 'PATIENT' | 'PROVIDER';
 
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+}
+
 export interface Service {
   id: string;
   name: string;
